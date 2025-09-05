@@ -9,15 +9,14 @@ type Pokemon = {
 };
 
 async function fetchPokemon(name: string): Promise<Pokemon> {
-  // Simulate a stable dataset that we want in the HTML payload
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`, {
-    // Cache on the server for a while; not user-specific
-    next: { revalidate: 3600 },
-  });
+  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+
   if (!res.ok) {
     throw new Error("Pokemon not found");
   }
+
   const json = await res.json();
+
   return {
     name: json.name,
     sprite: json.sprites.front_default,
