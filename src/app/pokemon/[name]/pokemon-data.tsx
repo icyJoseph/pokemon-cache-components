@@ -25,12 +25,17 @@ async function fetchPokemon(name: string): Promise<Pokemon> {
   };
 }
 
+async function fetchPokemonDataWithUUID(name: string) {
+  "use cache";
+  const [data, uuid] = await Promise.all([fetchPokemon(name), uuidMarker()]);
+  return { data, uuid };
+}
+
 export default async function PokemonData({
   params,
 }: Omit<PageProps<"/pokemon/[name]">, "searchParams">) {
-  "use cache";
   const { name } = await params;
-  const [data, uuid] = await Promise.all([fetchPokemon(name), uuidMarker()]);
+  const { data, uuid } = await fetchPokemonDataWithUUID(name);
 
   return (
     <section className="space-y-3">
